@@ -1,22 +1,51 @@
 import {
     createContactService,
-    getAllContactsService,
     getContactByIdService,
     updateContactService,
     deleteContactService,
+    countContacts,
+    listContacts,
 } from '../services/contacts.js';
 import createError from 'http-errors';
 
-export const getAllContactsController = async (req, res) => {
-    const contacts = await getAllContactsService();
+// GET /contacts з фільтрами, пагінацією, сортуванням
+export const getAllContacts = async (req, res) => {
+    const {
+        page = 1,
+        perPage = 10,
+        sortBy = 'name',
+        sortOrder = 'asc',
+        type,
+        isFavourite,
+    } = req.query;
+
+    const query = {};
+    if (type) query.contactType = type;
+    if (isFavourite !== undefined) query.isFavourite = isFavourite === 'true';
+
+    const skip = (page - 1) * perPage;
+    const sortDirection = sortOrder === 'desc' ? -1 : 1;
+    const totalItems = await countContacts(query);
+    const contacts = await listContacts(query, skip, +perPage, sortBy, sortDirection);
+
+    const totalPages = Math.ceil(totalItems / perPage);
 
     res.status(200).json({
         status: 200,
         message: 'Successfully found contacts!',
-        data: contacts,
+        data: {
+            data: contacts,
+            page: +page,
+            perPage: +perPage,
+            totalItems,
+            totalPages,
+            hasPreviousPage: page > 1,
+            hasNextPage: page < totalPages,
+        },
     });
 };
 
+// GET /contacts/:contactId
 export const getContactByIdController = async (req, res) => {
     const { contactId } = req.params;
     const contact = await getContactByIdService(contactId);
@@ -32,6 +61,7 @@ export const getContactByIdController = async (req, res) => {
     });
 };
 
+// POST /contacts
 export const createContactController = async (req, res) => {
     const newContact = await createContactService(req.body);
 
@@ -42,6 +72,7 @@ export const createContactController = async (req, res) => {
     });
 };
 
+// PATCH /contacts/:contactId
 export const updateContactController = async (req, res) => {
     const { contactId } = req.params;
     const updatedContact = await updateContactService(contactId, req.body);
@@ -57,6 +88,7 @@ export const updateContactController = async (req, res) => {
     });
 };
 
+// DELETE /contacts/:contactId
 export const deleteContactController = async (req, res) => {
     const { contactId } = req.params;
     const deletedContact = await deleteContactService(contactId);
