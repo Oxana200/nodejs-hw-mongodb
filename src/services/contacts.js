@@ -1,34 +1,21 @@
 import { Contact } from '../models/contactModel.js';
 
-export const listContacts = (query, skip, limit, sortBy, sortDirection) =>
-    Contact.find(query).skip(skip).limit(limit).sort({ [sortBy]: sortDirection });
-
-export const countContacts = (query) => Contact.countDocuments(query);
-
-
-export const getAllContactsService = async () => {
-    const contacts = await Contact.find();
-    return contacts;
+export const getAllContactsService = async (userId) => {
+    return Contact.find({ userId });
 };
 
-export const getContactByIdService = async (id) => {
-    const contact = await Contact.findById(id);
-    return contact;
+export const getContactByIdService = async (id, userId) => {
+    return Contact.findOne({ _id: id, userId });
 };
 
 export const createContactService = async (contactData) => {
-    const contact = await Contact.create(contactData);
-    return contact;
+    return Contact.create(contactData);
 };
 
-export const updateContactService = async (id, updateData) => {
-    const updatedContact = await Contact.findByIdAndUpdate(id, updateData, {
-        new: true,
-    });
-    return updatedContact;
+export const updateContactService = async (id, userId, updateData) => {
+    return Contact.findOneAndUpdate({ _id: id, userId }, updateData, { new: true });
 };
 
-export const deleteContactService = async (id) => {
-    const deletedContact = await Contact.findByIdAndDelete(id);
-    return deletedContact;
+export const deleteContactService = async (id, userId) => {
+    return Contact.findOneAndDelete({ _id: id, userId });
 };
