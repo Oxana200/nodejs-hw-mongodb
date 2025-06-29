@@ -20,11 +20,13 @@ export const loginUserController = async (req, res) => {
     const { email, password } = req.body;
     const { accessToken, refreshToken } = await loginUserService(email, password);
 
+    res.cookie('accessToken', accessToken, { httpOnly: true });
     res.cookie('refreshToken', refreshToken, { httpOnly: true });
+
     res.status(200).json({
         status: 200,
         message: 'Successfully logged in an user!',
-        data: { accessToken },
+        data: { accessToken, refreshToken },
     });
 };
 
@@ -33,6 +35,7 @@ export const refreshSessionController = async (req, res) => {
     const { accessToken, refreshToken } = await refreshSessionService(refreshTokenFromCookie);
 
     res.cookie('refreshToken', refreshToken, { httpOnly: true });
+
     res.status(200).json({
         status: 200,
         message: 'Successfully refreshed a session!',
@@ -43,5 +46,9 @@ export const refreshSessionController = async (req, res) => {
 export const logoutUserController = async (req, res) => {
     const refreshTokenFromCookie = req.cookies.refreshToken;
     await logoutUserService(refreshTokenFromCookie);
+
+    res.clearCookie('refreshToken');
+    res.clearCookie('accessToken');
+
     res.status(204).send();
 };
