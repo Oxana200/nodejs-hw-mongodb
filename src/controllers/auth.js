@@ -26,9 +26,10 @@ export const loginUserController = async (req, res) => {
     res.status(200).json({
         status: 200,
         message: 'Successfully logged in an user!',
-        data: { accessToken, refreshToken },
+        data: { accessToken }
     });
 };
+
 
 export const refreshSessionController = async (req, res) => {
     const refreshTokenFromCookie = req.cookies.refreshToken;
