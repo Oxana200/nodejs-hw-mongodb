@@ -14,15 +14,16 @@ export const setupServer = () => {
 
     app.use(cors());
     app.use(pino());
-    app.use(express.json());
     app.use(cookieParser());
 
-    app.use('/auth', authRouter);
+    // 🔥 ТІЛЬКИ auth — працює з JSON
+    app.use('/auth', express.urlencoded({ extended: true }), express.json(), authRouter);
 
+    // 🔥 CONTACTS — НЕ використовує express.json/urlencoded
+    // бо multer обробляє multipart/form-data сам
     app.use('/contacts', authenticate, contactsRouter);
 
     app.use(notFoundHandler);
-
     app.use(errorHandler);
 
     const PORT = process.env.PORT || 3000;

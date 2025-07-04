@@ -24,13 +24,14 @@ export const getAllContactsController = async (req, res) => {
         status: 200,
         message: 'Successfully found contacts!',
         data: {
-            data: contacts.map(({ _id, name, phoneNumber, email, isFavourite, contactType }) => ({
+            data: contacts.map(({ _id, name, phoneNumber, email, isFavourite, contactType, photo }) => ({
                 id: _id,
                 name,
                 phoneNumber,
                 email,
                 isFavourite,
-                contactType
+                contactType,
+                photo
             })),
             page,
             perPage,
@@ -58,14 +59,17 @@ export const getContactByIdController = async (req, res) => {
             phoneNumber: contact.phoneNumber,
             email: contact.email,
             isFavourite: contact.isFavourite,
-            contactType: contact.contactType
+            contactType: contact.contactType,
+            photo: contact.photo
         }
     });
 };
 
 export const createContactController = async (req, res) => {
-    const userId = req.user._id;
-    const newContact = await createContactService({ ...req.body, userId });
+
+    const userId = req.user?._id;
+    const photo = req.file?.path || '';
+    const newContact = await createContactService({ ...req.body, userId, photo });
 
     res.status(201).json({
         status: 201,
@@ -76,7 +80,8 @@ export const createContactController = async (req, res) => {
             phoneNumber: newContact.phoneNumber,
             email: newContact.email,
             isFavourite: newContact.isFavourite,
-            contactType: newContact.contactType
+            contactType: newContact.contactType,
+            photo: newContact.photo
         }
     });
 };
@@ -84,6 +89,11 @@ export const createContactController = async (req, res) => {
 export const updateContactController = async (req, res) => {
     const { contactId } = req.params;
     const userId = req.user._id;
+
+    if (req.file) {
+        req.body.photo = req.file.path;
+    }
+
     const updatedContact = await updateContactService(contactId, userId, req.body);
 
     if (!updatedContact) throw createError(404, 'Contact not found');
@@ -97,7 +107,8 @@ export const updateContactController = async (req, res) => {
             phoneNumber: updatedContact.phoneNumber,
             email: updatedContact.email,
             isFavourite: updatedContact.isFavourite,
-            contactType: updatedContact.contactType
+            contactType: updatedContact.contactType,
+            photo: updatedContact.photo
         }
     });
 };
