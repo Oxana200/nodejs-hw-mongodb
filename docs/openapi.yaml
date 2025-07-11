@@ -15,7 +15,7 @@ tags:
 
 servers:
   - url: http://localhost:3000
-  - url: https://<вставиш-свою-render-ссилку>
+  - url: https://nodejs-hw-mongodb-u8jx.onrender.com
 
 paths:
   /contacts:
