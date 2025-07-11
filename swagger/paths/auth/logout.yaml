@@ -1,0 +1,11 @@
+post:
+  tags:
+    - Auth
+  summary: Вихід користувача
+  operationId: logoutUser
+  description: Вихід користувача, видалення токену.
+  security:
+    - bearerAuth: []
+  responses:
+    '204':
+      description: Успішний вихід

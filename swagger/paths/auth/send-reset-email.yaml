@@ -1,0 +1,20 @@
+post:
+  tags:
+    - Auth
+  summary: Надіслати лист для відновлення пароля
+  operationId: sendResetEmail
+  description: Надсилає email з посиланням на відновлення пароля.
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            email:
+              type: string
+              format: email
+              example: user@example.com
+  responses:
+    '200':
+      description: Лист надіслано (або відповідь без розкриття інформації)

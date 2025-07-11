@@ -9,6 +9,14 @@ import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import { authenticate } from './middlewares/authenticate.js';
 
+import swaggerUi from 'swagger-ui-express';
+import YAML from 'yamljs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const swaggerDocument = YAML.load(path.join(__dirname, '../docs/openapi.yaml'));
+
 export const setupServer = () => {
     const app = express();
 
@@ -16,11 +24,8 @@ export const setupServer = () => {
     app.use(pino());
     app.use(cookieParser());
 
-    // 🔥 ТІЛЬКИ auth — працює з JSON
+    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
     app.use('/auth', express.urlencoded({ extended: true }), express.json(), authRouter);
-
-    // 🔥 CONTACTS — НЕ використовує express.json/urlencoded
-    // бо multer обробляє multipart/form-data сам
     app.use('/contacts', authenticate, contactsRouter);
 
     app.use(notFoundHandler);
