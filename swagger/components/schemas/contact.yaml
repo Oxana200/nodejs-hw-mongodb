@@ -1,0 +1,22 @@
+type: object
+properties:
+  _id:
+    type: string
+    example: '64a8a1a6f3e2a56bc8d6b456'
+  name:
+    type: string
+    example: 'Іван Петров'
+  email:
+    type: string
+    example: 'ivan@example.com'
+  phone:
+    type: string
+    example: '+380991112233'
+  favorite:
+    type: boolean
+    example: true
+required:
+  - _id
+  - name
+  - email
+  - phone

@@ -9,20 +9,26 @@ import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import { authenticate } from './middlewares/authenticate.js';
 
+import swaggerUi from 'swagger-ui-express';
+import YAML from 'yamljs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const swaggerDocument = YAML.load(path.join(__dirname, '../docs/openapi.yaml'));
+
 export const setupServer = () => {
     const app = express();
 
     app.use(cors());
     app.use(pino());
-    app.use(express.json());
     app.use(cookieParser());
 
-    app.use('/auth', authRouter);
-
+    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+    app.use('/auth', express.urlencoded({ extended: true }), express.json(), authRouter);
     app.use('/contacts', authenticate, contactsRouter);
 
     app.use(notFoundHandler);
-
     app.use(errorHandler);
 
     const PORT = process.env.PORT || 3000;

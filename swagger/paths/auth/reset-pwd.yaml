@@ -1,0 +1,27 @@
+post:
+  tags:
+    - Auth
+  summary: Скидання пароля
+  operationId: resetPassword
+  description: Встановлює новий пароль за токеном з листа.
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - token
+            - password
+          properties:
+            token:
+              type: string
+              example: abc123.token.value
+            password:
+              type: string
+              example: newStrongPassword
+  responses:
+    '200':
+      description: Пароль оновлено
+    '400':
+      description: Недійсний або прострочений токен

@@ -1,0 +1,38 @@
+get:
+  tags:
+    - Contacts
+  summary: Отримати список контактів
+  operationId: getContacts
+  description: Повертає всі контакти користувача з можливістю фільтрації.
+  security:
+    - bearerAuth: []
+  parameters:
+    - name: favorite
+      in: query
+      description: Фільтрація за улюбленими
+      required: false
+      schema:
+        type: boolean
+    - name: page
+      in: query
+      description: Номер сторінки
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+    - name: limit
+      in: query
+      description: Кількість елементів на сторінці
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+  responses:
+    '200':
+      description: Список контактів
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Contact'
