@@ -1,20 +1,36 @@
-post:
-  tags:
-    - Auth
-  summary: Надіслати лист для відновлення пароля
-  operationId: sendResetEmail
-  description: Надсилає email з посиланням на відновлення пароля.
-  requestBody:
-    required: true
+tags:
+  - Auth
+summary: Send reset password email
+operationId: sendResetEmail
+description: Sends an email with a reset password link.
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: ../../components/schemas/EmailInput.yaml
+responses:
+  '200':
+    description: Reset email sent successfully
     content:
       application/json:
         schema:
-          type: object
-          properties:
-            email:
-              type: string
-              format: email
-              example: user@example.com
-  responses:
-    '200':
-      description: Лист надіслано (або відповідь без розкриття інформації)
+          $ref: ../../components/schemas/SuccessMessage.yaml
+  '400':
+    description: Invalid request body (validation error)
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/Error.yaml
+  '404':
+    description: User not found
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/Error.yaml
+  '500':
+    description: Failed to send email
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/Error.yaml

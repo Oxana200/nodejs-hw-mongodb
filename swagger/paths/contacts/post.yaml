@@ -1,23 +1,38 @@
-post:
-  tags:
-    - Contacts
-  summary: Додати новий контакт
-  operationId: createContact
-  description: Створює новий контакт користувача.
-  security:
-    - bearerAuth: []
-  requestBody:
-    required: true
+tags:
+  - Contacts
+summary: Create a new contact
+operationId: createContact
+description: Create a new contact for the authenticated user. Optional photo can be uploaded.
+security:
+  - bearerAuth: []
+requestBody:
+  required: true
+  content:
+    multipart/form-data:
+      schema:
+        $ref: ../../components/schemas/CreateContactInput.yaml
+responses:
+  '201':
+    description: Contact created successfully
     content:
       application/json:
         schema:
-          $ref: '#/components/schemas/Contact'
-  responses:
-    '201':
-      description: Контакт створено
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Contact'
-    '400':
-      description: Некоректні дані
+          $ref: ../../components/schemas/ContactResponse.yaml
+  '400':
+    description: Invalid request body or validation error
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/Error.yaml
+  '401':
+    description: Unauthorized (missing or invalid token)
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/Error.yaml
+  '500':
+    description: Internal server error
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/Error.yaml

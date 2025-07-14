@@ -1,21 +1,26 @@
-post:
-  tags:
-    - Auth
-  summary: Оновити сесію
-  operationId: refreshSession
-  description: Повертає новий access токен, якщо refresh токен валідний.
-  security:
-    - bearerAuth: []
-  responses:
-    '200':
-      description: Новий access токен
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              accessToken:
-                type: string
-                example: your.new.jwt.token
-    '401':
-      description: Refresh токен недійсний або відсутній
+tags:
+  - Auth
+summary: Refresh session
+operationId: refreshToken
+description: Get a new access and refresh token using the existing refresh token.
+security:
+  - bearerAuth: []
+responses:
+  '200':
+    description: Tokens refreshed
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/AuthTokens.yaml
+  '400':
+    description: Missing refresh token in cookies
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/Error.yaml
+  '401':
+    description: Invalid or expired refresh token
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/Error.yaml

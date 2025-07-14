@@ -1,27 +1,30 @@
-post:
-  tags:
-    - Auth
-  summary: Вхід користувача
-  operationId: loginUser
-  description: Авторизація користувача за email і паролем.
-  requestBody:
-    required: true
+tags:
+  - Auth
+summary: Login user
+operationId: loginUser
+description: Login with email and password. Returns access and refresh tokens.
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: ../../components/schemas/LoginInput.yaml
+responses:
+  '200':
+    description: Login successful
     content:
       application/json:
         schema:
-          type: object
-          required:
-            - email
-            - password
-          properties:
-            email:
-              type: string
-              example: user@example.com
-            password:
-              type: string
-              example: secret123
-  responses:
-    '200':
-      description: Успішна авторизація. Повертає токен.
-    '401':
-      description: Невірні облікові дані
+          $ref: ../../components/schemas/AuthTokens.yaml
+  '400':
+    description: Invalid request body (validation error)
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/Error.yaml
+  '401':
+    description: Invalid credentials
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/Error.yaml

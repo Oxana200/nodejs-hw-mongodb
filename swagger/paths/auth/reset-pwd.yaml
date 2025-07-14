@@ -1,27 +1,36 @@
-post:
-  tags:
-    - Auth
-  summary: Скидання пароля
-  operationId: resetPassword
-  description: Встановлює новий пароль за токеном з листа.
-  requestBody:
-    required: true
+tags:
+  - Auth
+summary: Reset password
+operationId: resetPassword
+description: Reset password using a valid token.
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: ../../components/schemas/ResetPasswordInput.yaml
+responses:
+  '200':
+    description: Password reset successful
     content:
       application/json:
         schema:
-          type: object
-          required:
-            - token
-            - password
-          properties:
-            token:
-              type: string
-              example: abc123.token.value
-            password:
-              type: string
-              example: newStrongPassword
-  responses:
-    '200':
-      description: Пароль оновлено
-    '400':
-      description: Недійсний або прострочений токен
+          $ref: ../../components/schemas/SuccessMessage.yaml
+  '400':
+    description: Invalid request body (validation error)
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/Error.yaml
+  '401':
+    description: Token is expired or invalid
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/Error.yaml
+  '404':
+    description: User not found
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/Error.yaml

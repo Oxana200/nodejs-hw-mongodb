@@ -1,11 +1,22 @@
-post:
-  tags:
-    - Auth
-  summary: Вихід користувача
-  operationId: logoutUser
-  description: Вихід користувача, видалення токену.
-  security:
-    - bearerAuth: []
-  responses:
-    '204':
-      description: Успішний вихід
+tags:
+  - Auth
+summary: Logout user
+operationId: logoutUser
+description: Logout user by deleting the refresh token session.
+security:
+  - bearerAuth: []
+responses:
+  '204':
+    description: Logged out successfully
+  '400':
+    description: Missing refresh token in cookies
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/Error.yaml
+  '401':
+    description: Invalid or expired refresh token
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/Error.yaml

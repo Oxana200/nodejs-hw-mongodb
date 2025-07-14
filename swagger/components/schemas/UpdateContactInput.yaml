@@ -1,0 +1,18 @@
+type: object
+properties:
+  name:
+    type: string
+    example: Jane Doe
+  phoneNumber:
+    type: string
+    example: +380661112233
+  email:
+    type: string
+  isFavourite:
+    type: boolean
+  contactType:
+    type: string
+    enum: [work, home, personal]
+  photo:
+    type: string
+    format: binary

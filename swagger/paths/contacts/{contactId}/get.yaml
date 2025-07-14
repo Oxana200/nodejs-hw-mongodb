@@ -1,24 +1,45 @@
-get:
-  tags:
-    - Contacts
-  summary: Отримати контакт за ID
-  operationId: getContactById
-  description: Отримати детальну інформацію про контакт по його унікальному ідентифікатору.
-  security:
-    - bearerAuth: []
-  parameters:
-    - name: contactId
-      in: path
-      required: true
-      description: Унікальний ідентифікатор контакту
-      schema:
-        type: string
-  responses:
-    '200':
-      description: Успішна відповідь. Контакт знайдено.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Contact'
-    '404':
-      description: Контакт не знайдено
+tags:
+  - Contacts
+summary: Get a contact by ID
+operationId: getContactById
+description: Retrieve detailed information about a specific contact by its unique ID.
+security:
+  - bearerAuth: []
+parameters:
+  - name: contactId
+    in: path
+    required: true
+    description: The ID of the contact to retrieve
+    schema:
+      type: string
+responses:
+  '200':
+    description: Contact retrieved successfully
+    content:
+      application/json:
+        schema:
+          $ref: ../../../components/schemas/Contact.yaml
+  '400':
+    description: Invalid contact ID
+    content:
+      application/json:
+        schema:
+          $ref: ../../../components/schemas/Error.yaml
+  '401':
+    description: Unauthorized (missing or invalid token)
+    content:
+      application/json:
+        schema:
+          $ref: ../../../components/schemas/Error.yaml
+  '404':
+    description: Contact not found
+    content:
+      application/json:
+        schema:
+          $ref: ../../../components/schemas/Error.yaml
+  '500':
+    description: Internal server error
+    content:
+      application/json:
+        schema:
+          $ref: ../../../components/schemas/Error.yaml

@@ -2,21 +2,38 @@ type: object
 properties:
   _id:
     type: string
-    example: '64a8a1a6f3e2a56bc8d6b456'
+    example: '64b123456789abcdef012345'
   name:
     type: string
-    example: 'Іван Петров'
+    example: 'John Doe'
+  phoneNumber:
+    type: string
+    example: '+380991234567'
   email:
     type: string
-    example: 'ivan@example.com'
-  phone:
-    type: string
-    example: '+380991112233'
-  favorite:
+    example: 'john.doe@example.com'
+  isFavourite:
     type: boolean
     example: true
+  contactType:
+    type: string
+    enum: [work, home, personal]
+    example: 'personal'
+  userId:
+    type: string
+    example: '64b0987654321abcdef01234'
+  photo:
+    type: string
+    example: ''
+  createdAt:
+    type: string
+    format: date-time
+  updatedAt:
+    type: string
+    format: date-time
 required:
   - _id
   - name
-  - email
-  - phone
+  - phoneNumber
+  - contactType
+  - userId

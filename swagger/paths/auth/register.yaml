@@ -1,29 +1,30 @@
-post:
-  tags:
-    - Auth
-  summary: Реєстрація нового користувача
-  operationId: registerUser
-  description: Створює нового користувача.
-  requestBody:
-    required: true
+tags:
+  - Auth
+summary: Register a new user
+operationId: registerUser
+description: Register a new user with name, email and password.
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: ../../components/schemas/RegisterInput.yaml
+responses:
+  '201':
+    description: User registered successfully
     content:
       application/json:
         schema:
-          type: object
-          required:
-            - email
-            - password
-          properties:
-            email:
-              type: string
-              format: email
-              example: user@example.com
-            password:
-              type: string
-              minLength: 6
-              example: secret123
-  responses:
-    '201':
-      description: Користувач успішно створений
-    '409':
-      description: Користувач з таким email вже існує
+          $ref: ../../components/schemas/SuccessMessage.yaml
+  '400':
+    description: Invalid request body (validation error)
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/Error.yaml
+  '409':
+    description: Email already exists
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/Error.yaml
