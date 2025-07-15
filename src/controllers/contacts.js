@@ -24,15 +24,7 @@ export const getAllContactsController = async (req, res) => {
         status: 200,
         message: 'Successfully found contacts!',
         data: {
-            data: contacts.map(({ _id, name, phoneNumber, email, isFavourite, contactType, photo }) => ({
-                id: _id,
-                name,
-                phoneNumber,
-                email,
-                isFavourite,
-                contactType,
-                photo
-            })),
+            contacts, // повертаємо масив без трансформацій
             page,
             perPage,
             totalItems,
@@ -66,7 +58,6 @@ export const getContactByIdController = async (req, res) => {
 };
 
 export const createContactController = async (req, res) => {
-
     const userId = req.user?._id;
     const photo = req.file?.path || '';
     const newContact = await createContactService({ ...req.body, userId, photo });

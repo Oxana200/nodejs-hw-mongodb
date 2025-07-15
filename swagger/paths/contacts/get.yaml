@@ -18,6 +18,35 @@ parameters:
     schema:
       type: integer
       default: 10
+  - name: sortBy
+    in: query
+    required: false
+    schema:
+      type: string
+      enum: [name, email, createdAt]
+    description: Field to sort by
+  - name: sortDir
+    in: query
+    required: false
+    schema:
+      type: string
+      enum: [asc, desc]
+    description: Direction of sorting (ascending or descending)
+  - name: isFavourite
+    in: query
+    required: false
+    schema:
+      type: string
+      enum: ['true', 'false']
+    description: Filter by favourite status
+  - name: contactType
+    in: query
+    required: false
+    schema:
+      type: string
+      enum: [personal, work, home]
+    description: Filter by contact type
+
 responses:
   '200':
     description: Contacts retrieved successfully
